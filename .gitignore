@@ -1,0 +1,7 @@
+node_modules/
+.env
+cargo.db
+cargo.db-shm
+cargo.db-wal
+npm-debug.log*
+.DS_Store

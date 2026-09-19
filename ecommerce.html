@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CARGO - Tactical Boots, Expedition Tents, and Heavy-Duty Bags. Built for South African conditions.">
+    <title>CARGO | Tactical Boots, Tents & Bags</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Schema.org JSON-LD for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "CARGO",
+      "description": "Tactical Boots, Expedition Tents & Loadout Packs",
+      "url": "http://localhost:5000",
+      "telephone": "+27767797452",
+      "priceRange": "R650 - R4800",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Pretoria",
+        "addressRegion": "Gauteng",
+        "addressCountry": "ZA"
+      }
+    }
+    </script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container main-header flex-between">
+            <!-- Logo -->
+            <a href="#home" onclick="navigate('home')" class="logo-container">
+                <span class="logo-text">CARGO</span>
+            </a>
+
+            <!-- Search Bar -->
+            <div style="flex: 1; max-width: 550px; margin: 0 30px;">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search tactical boots, tents, rucksacks...">
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <a href="#contact" onclick="navigate('contact')" title="Contact"><i class="fas fa-envelope"></i></a>
+                <a href="https://wa.me/27767797452" target="_blank" title="WhatsApp Us" style="color: #25d366;"><i class="fab fa-whatsapp"></i></a>
+                <a href="#cart" onclick="navigate('cart')" title="Shopping Cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="container">
+                <ul class="nav-list" id="nav-list">
+                    <li><a href="#home" class="nav-link active" onclick="navigate('home')">Home</a></li>
+                    
+                    <!-- Dropdown for Categories -->
+                    <li class="dropdown">
+                        <a href="#shop" class="nav-link" onclick="navigate('shop')">
+                            Categories <i class="fas fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-content" id="nav-dropdown">
+                            <a href="#shop" onclick="setCategory('all')">All Products</a>
+                            <a href="#boots" onclick="setCategory('boots')">Tactical Boots</a>
+                            <a href="#tents" onclick="setCategory('tents')">Tents & Shelter</a>
+                            <a href="#bags" onclick="setCategory('bags')">Bags & Packs</a>
+                            <a href="#shirts" onclick="setCategory('shirts')">T-Shirts</a>
+                        </div>
+                    </li>
+
+                    <li><a href="#boots" class="nav-link" onclick="setCategory('boots')">Boots</a></li>
+                    <li><a href="#tents" class="nav-link" onclick="setCategory('tents')">Tents</a></li>
+                    <li><a href="#bags" class="nav-link" onclick="setCategory('bags')">Bags</a></li>
+                    <li><a href="#shirts" class="nav-link" onclick="setCategory('shirts')">T-Shirts</a></li>
+                    <li><a href="#about" class="nav-link" onclick="navigate('about')">About Us</a></li>
+                    <li><a href="#contact" class="nav-link" onclick="navigate('contact')">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero (Only on Home) -->
+        <section id="hero-section" class="hero">
+            <div class="container">
+                <h1>Mission Ready Gear</h1>
+            </div>
+        </section>
+
+        <!-- Dynamic Main Content Area -->
+        <section id="main-content" class="container view-section">
+
+            <!-- 1. SHOP VIEW / PRODUCT LISTING PAGE -->
+            <div id="view-shop" class="shop-layout">
+                <aside class="category-sidebar">
+                    <h3>Gear Categories</h3>
+                    <ul class="cat-list" id="category-list">
+                        <li class="cat-item active" data-id="all" onclick="setCategory('all')"><i class="fas fa-th-large"></i> All Categories</li>
+                        <li class="cat-item" data-id="boots" onclick="setCategory('boots')"><i class="fas fa-shoe-prints"></i> Boots</li>
+                        <li class="cat-item" data-id="tents" onclick="setCategory('tents')"><i class="fas fa-campground"></i> Tents & Shelter</li>
+                        <li class="cat-item" data-id="bags" onclick="setCategory('bags')"><i class="fas fa-hiking"></i> Bags & Packs</li>
+                        <li class="cat-item" data-id="shirts" onclick="setCategory('shirts')"><i class="fas fa-tshirt"></i> T-Shirts</li>
+                    </ul>
+                </aside>
+
+                <div class="product-area">
+                    <div class="flex-between mb-4" style="border-bottom: 2px solid var(--border-color); padding-bottom: 12px;">
+                        <div>
+                            <h2 id="category-title" style="font-size: 1.6rem; color: var(--secondary-color);">All Products</h2>
+                            <span id="product-count-label" style="color: var(--text-light); font-weight: 600;">Loading catalog...</span>
+                        </div>
+                        <select id="sort-products" class="form-control" style="width:auto; min-width:190px;" aria-label="Sort products">
+                            <option value="newest">Newest first</option>
+                            <option value="price_asc">Price: Low to high</option>
+                            <option value="price_desc">Price: High to low</option>
+                            <option value="name_asc">Name: A to Z</option>
+                        </select>
+                    </div>
+                    <div class="grid" id="product-grid">
+                        <!-- Dynamic Server Products Injected Here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. INDIVIDUAL PRODUCT DETAIL VIEW -->
+            <div id="view-product-detail" class="hidden">
+                <a onclick="navigate('shop')" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Products</a>
+
+                <div class="product-detail-container">
+                    <!-- Gallery -->
+                    <div class="detail-gallery">
+                        <img id="detail-main-img" src="" alt="Product Image" class="main-image">
+                        <div class="thumbnail-list" id="detail-thumbnails">
+                            <!-- Thumbnails injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Detail Info -->
+                    <div class="detail-info">
+                        <div id="detail-stock-badge" style="display:inline-block; margin-bottom: 8px;"></div>
+                        <h2 id="detail-title">Product Name</h2>
+                        <div id="detail-price" class="detail-price">R0.00</div>
+                        <div id="detail-sku" style="font-size:0.85rem; color:#777; margin-bottom:12px;"></div>
+                        <p id="detail-desc" class="detail-desc">Product description goes here.</p>
+                        <div id="detail-specifications" style="margin-bottom:20px;"></div>
+
+                        <!-- Size Selector -->
+                        <div class="size-selector" id="size-area">
+                            <span class="size-label"><i class="fas fa-ruler-horizontal"></i> Select Boot Size (UK / SA):</span>
+                            <div class="size-grid" id="size-options">
+                                <!-- Sizes injected here -->
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="detail-actions">
+                            <div class="detail-btn-row">
+                                <button class="btn btn-primary" id="btn-detail-add" onclick="addToCartDetail()">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                                <button class="btn btn-buy-now" id="btn-detail-buy" onclick="buyNowDetail()">
+                                    <i class="fas fa-bolt"></i> Buy Now
+                                </button>
+                            </div>
+
+                            <a id="detail-whatsapp-btn" href="#" target="_blank" class="btn btn-whatsapp btn-block" style="margin-top: 6px;">
+                                <i class="fab fa-whatsapp"></i> Inquire on WhatsApp (076 779 7452)
+                            </a>
+                        </div>
+
+                        <!-- Quality Badges -->
+                        <div class="badge-row">
+                            <div class="badge-item"><i class="fas fa-shield-alt"></i> Heavy Duty Field Tested</div>
+                            <div class="badge-item"><i class="fas fa-truck"></i> Fast Courier SA-Wide</div>
+                            <div class="badge-item"><i class="fas fa-lock"></i> Secure PayFast / EFT</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. SHOPPING CART VIEW -->
+            <div id="view-cart" class="hidden">
+                <h2 class="mb-4" style="color: var(--secondary-color);"><i class="fas fa-shopping-cart"></i> Your Shopping Cart</h2>
+                <div id="cart-content">
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Option / Size</th>
+                                <th>Unit Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-items-body">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+
+                    <div class="cart-summary">
+                        <h3 style="margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Order Summary</h3>
+                        <div class="summary-row"><span>Subtotal:</span> <strong id="cart-subtotal">R0.00</strong></div>
+                        <div class="summary-row"><span>Courier Shipping:</span> <strong id="cart-shipping">R150.00</strong></div>
+                        <div class="summary-row total-row"><span>Grand Total:</span> <span id="cart-total">R0.00</span></div>
+                        <button class="btn btn-primary btn-block" style="margin-top: 12px;" type="button" onclick="clearCart()">
+                            <i class="fas fa-trash-alt"></i> Clear Cart
+                        </button>
+                        <button class="btn btn-buy-now btn-block" style="margin-top: 20px; padding: 14px; font-size: 1.1rem;"
+                            onclick="navigate('checkout')">
+                            <i class="fas fa-lock"></i> Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+
+                <div id="cart-empty-msg" class="hidden" style="text-align: center; padding: 60px; background: white; border-radius: 8px;">
+                    <i class="fas fa-shopping-cart fa-3x" style="color: #ccc; margin-bottom: 16px;"></i>
+                    <h3>Your cart is currently empty.</h3>
+                    <p style="color: #666; margin-bottom: 20px;">Explore our catalog of boots, tents, and bags to start shopping.</p>
+                    <button class="btn btn-primary" onclick="navigate('shop')">Explore Products</button>
+                </div>
+            </div>
+
+            <!-- 4. CHECKOUT VIEW -->
+            <div id="view-checkout" class="hidden">
+                <a onclick="navigate('cart')" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Cart</a>
+                <h2 style="margin-bottom: 24px; color: var(--secondary-color);"><i class="fas fa-shield-alt"></i> Secure Checkout</h2>
+
+                <div class="checkout-layout">
+                    <!-- Left: Checkout Form -->
+                    <div class="checkout-box">
+                        <form id="checkout-form" onsubmit="processCheckout(event)">
+                            <h3 style="margin-bottom: 16px; color: var(--primary-color);">1. Shipping Information</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>First Name *</label>
+                                    <input type="text" id="chk-fname" class="form-control" placeholder="John" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name *</label>
+                                    <input type="text" id="chk-lname" class="form-control" placeholder="Doe" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Email Address *</label>
+                                    <input type="email" id="chk-email" class="form-control" placeholder="john@example.co.za" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone / WhatsApp Number *</label>
+                                    <input type="tel" id="chk-phone" class="form-control" placeholder="076 779 7452" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Street Delivery Address *</label>
+                                <input type="text" id="chk-address" class="form-control" placeholder="123 Street, Suburb" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>City / Town *</label>
+                                    <input type="text" id="chk-city" class="form-control" placeholder="Pretoria" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Postal Code *</label>
+                                    <input type="text" id="chk-postal" class="form-control" placeholder="0001" required>
+                                </div>
+                            </div>
+
+                            <h3 style="margin-top: 28px; margin-bottom: 16px; color: var(--primary-color);">2. Payment Method</h3>
+                            <div style="padding: 16px; border: 1px solid var(--border-color); border-radius: 6px; background: #fdfdfd; margin-bottom: 24px;">
+                                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 10px;">
+                                    <input type="radio" name="payment" value="payfast" checked>
+                                    <div>
+                                        <strong>Credit / Debit Card (Instant via PayFast)</strong>
+                                        <div style="font-size: 0.85rem; color: #666;">Visa, Mastercard, Instant EFT, Debit Card</div>
+                                    </div>
+                                </label>
+                                <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
+                                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                                    <input type="radio" name="payment" value="eft">
+                                    <div>
+                                        <strong>Direct Bank Transfer / Manual EFT</strong>
+                                        <div style="font-size: 0.85rem; color: #666;">Order confirmed upon payment receipt</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <button type="submit" id="btn-place-order" class="btn btn-buy-now btn-block" style="padding: 16px; font-size: 1.15rem;">
+                                <i class="fas fa-check-circle"></i> Place Order Now
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Order Review -->
+                    <div class="checkout-box" style="height: fit-content;">
+                        <h3 style="margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Order Items</h3>
+                        <div id="checkout-items-list" style="max-height: 250px; overflow-y: auto; margin-bottom: 15px;">
+                            <!-- Injected by JS -->
+                        </div>
+                        <div class="summary-row"><span>Subtotal:</span> <strong id="chk-subtotal">R0.00</strong></div>
+                        <div class="summary-row"><span>Shipping:</span> <strong id="chk-shipping">R150.00</strong></div>
+                        <div class="summary-row total-row"><span>Total:</span> <span id="chk-total">R0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. CONTACT VIEW -->
+            <div id="view-contact" class="hidden">
+                <div style="text-align: center; margin-bottom: 35px;">
+                    <h2 style="color: var(--secondary-color); font-size: 2rem;">Contact CARGO</h2>
+                    <p style="color: #666; font-size: 1.05rem; max-width: 600px; margin: 8px auto;">Have questions regarding boot sizing, bulk tactical orders, or shipping? Reach out to our support team.</p>
+                </div>
+
+                <div class="contact-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+                    <!-- Contact Info -->
+                    <div style="background: #fff; padding: 32px; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                        <h3 style="margin-bottom: 22px; color: var(--primary-color);"><i class="fas fa-headset"></i> Direct Support</h3>
+                        
+                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 22px;">
+                            <i class="fab fa-whatsapp fa-2x" style="color: #25d366;"></i>
+                            <div>
+                                <strong style="display: block; font-size: 1.05rem;">WhatsApp Helpline</strong>
+                                <a href="https://wa.me/27767797452" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 700; font-size: 1.1rem;">
+                                    076 779 7452
+                                </a>
+                                <div style="font-size: 0.85rem; color: #777;">Click to start a chat directly</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 22px;">
+                            <i class="fas fa-envelope fa-2x" style="color: var(--accent-color);"></i>
+                            <div>
+                                <strong style="display: block; font-size: 1.05rem;">Email Address</strong>
+                                <a href="mailto:support@cargogear.co.za" style="color: #333; text-decoration: none;">
+                                    support@cargogear.co.za
+                                </a>
+                                <div style="font-size: 0.85rem; color: #777;">Typical response within 2-4 hours</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 22px;">
+                            <i class="fas fa-map-marker-alt fa-2x" style="color: var(--primary-color);"></i>
+                            <div>
+                                <strong style="display: block; font-size: 1.05rem;">Dispatch Depot</strong>
+                                <span style="color: #555;">Pretoria & Johannesburg, South Africa</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div style="background: #fff; padding: 32px; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                        <form onsubmit="submitContactForm(event, this)">
+                            <h3 style="margin-bottom: 18px; color: var(--primary-color);"><i class="fas fa-paper-plane"></i> Send Us a Message</h3>
+                            <div class="form-group">
+                                <label>Your Full Name *</label>
+                                <input type="text" id="contact-name" class="form-control" required placeholder="John Doe">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address *</label>
+                                <input type="email" id="contact-email" class="form-control" required placeholder="john@example.co.za">
+                            </div>
+                            <div class="form-group">
+                                <label>Message *</label>
+                                <textarea id="contact-message" rows="4" class="form-control" required placeholder="How can we assist you with our boots, tents, or bags?"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1.05rem;">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. ABOUT VIEW -->
+            <div id="view-about" class="hidden about-text">
+                <h2>About CARGO</h2>
+                <p>Welcome to <strong>CARGO</strong>, South Africa's trusted supplier of high-durability tactical footwear, expedition tents, and heavy-duty packs.</p>
+                <br>
+                <p>Whether operating in field security, law enforcement, outdoor tracking, or wilderness expeditions, our gear is selected and manufactured to meet rigorous performance and resilience demands.</p>
+                <br>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="navigate('shop')">Explore The Collection</button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- ORDER COMPLETE / SUCCESS MODAL -->
+    <div id="order-success-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 style="color: var(--primary-color);"><i class="fas fa-check-circle" style="color: #28a745;"></i> Order Confirmed!</h3>
+                <button onclick="closeModal('order-success-modal')" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">&times;</button>
+            </div>
+            <div id="order-success-content"></div>
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="btn btn-primary" onclick="closeModal('order-success-modal'); navigate('home');">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEGAL POLICY MODALS -->
+    <div id="privacy-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>POPIA Privacy Policy</h3>
+                <button onclick="closeModal('privacy-modal')" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">&times;</button>
+            </div>
+            <div style="font-size: 0.9rem; line-height: 1.6; color: #444;">
+                <p><strong>Protection of Personal Information (POPIA) Notice:</strong></p>
+                <p>CARGO is committed to protecting your personal information. When you place an order, we collect your name, delivery address, phone number, and email strictly for order fulfillment, courier delivery via The Courier Guy, and order updates.</p>
+                <br>
+                <p>We do not store credit card details; all card payments are securely processed off-site by PayFast (Pty) Ltd in compliance with PCI-DSS standards.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="terms-modal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Terms & Conditions</h3>
+                <button onclick="closeModal('terms-modal')" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">&times;</button>
+            </div>
+            <div style="font-size: 0.9rem; line-height: 1.6; color: #444;">
+                <p><strong>Terms of Service:</strong></p>
+                <p>1. Orders are subject to stock verification and dispatch confirmation.</p>
+                <p>2. Courier delivery takes 2-4 business days to main SA centers, and 3-6 days to regional areas.</p>
+                <p>3. Unworn boots in original packaging may be exchanged within 14 days of delivery.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden PayFast Redirect Form Container -->
+    <div id="payfast-form-container" style="display: none;"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-grid">
+            <div>
+                <h3>CARGO</h3>
+                <p>Tactical footwear, durable bivy & dome tents, and ballistic nylon packs.</p>
+                <div class="social-links" style="margin-top: 20px;">
+                    <a href="https://wa.me/27767797452" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3>Shop Categories</h3>
+                <ul style="list-style: none; line-height: 2;">
+                    <li><a href="#boots" onclick="setCategory('boots')" style="color: #ccc; text-decoration: none;">Tactical Boots</a></li>
+                    <li><a href="#tents" onclick="setCategory('tents')" style="color: #ccc; text-decoration: none;">Expedition Tents</a></li>
+                    <li><a href="#bags" onclick="setCategory('bags')" style="color: #ccc; text-decoration: none;">Assault Bags & Packs</a></li>
+                    <li><a href="#shop" onclick="navigate('shop')" style="color: #ccc; text-decoration: none;">All Equipment</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Customer Service</h3>
+                <p><i class="fab fa-whatsapp" style="color:#25d366;"></i> 076 779 7452</p>
+                <p><i class="fas fa-envelope"></i> support@cargogear.co.za</p>
+                <p><i class="fas fa-clock"></i> Mon-Sat: 8:00 AM - 6:00 PM</p>
+                <p style="margin-top: 10px;">
+                    <a href="javascript:void(0)" onclick="openModal('privacy-modal')" style="color: #aaa; text-decoration: underline; font-size: 0.85rem; margin-right: 10px;">Privacy Policy</a>
+                    <a href="javascript:void(0)" onclick="openModal('terms-modal')" style="color: #aaa; text-decoration: underline; font-size: 0.85rem;">Terms & Returns</a>
+                </p>
+            </div>
+        </div>
+        <div class="container text-center" style="padding-top: 25px; border-top: 1px solid #333; margin-top: 30px; font-size: 0.9rem;">
+            <p>&copy; 2026 CARGO. All Rights Reserved. <a href="/admin" target="_blank" style="color: #555; text-decoration: none; margin-left: 10px;"><i class="fas fa-lock"></i> Staff</a></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Automatic API Base detection: works on http://localhost:5000, file://, or Live Server http://127.0.0.1:5500
+        const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '5000'))
+            ? 'http://localhost:5000'
+            : '';
+
+        // State
+        let catalog = [];
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let sortOrder = 'newest';
+        let selectedSize = null;
+        let selectedVariant = null;
+        let currentProduct = null;
+        let catalogError = false;
+
+        // Cart Data
+        let cartItems = [];
+        try {
+            cartItems = JSON.parse(localStorage.getItem('cargoStoreCart')) || [];
+        } catch (e) {
+            cartItems = [];
+        }
+
+        // DOM Elements
+        const cartCount = document.getElementById('cart-count');
+        const productGrid = document.getElementById('product-grid');
+        const categoryTitle = document.getElementById('category-title');
+        const productCountLabel = document.getElementById('product-count-label');
+        const searchInput = document.getElementById('search-input');
+        const sortProducts = document.getElementById('sort-products');
+
+        // Views
+        const heroSection = document.getElementById('hero-section');
+        const viewShop = document.getElementById('view-shop');
+        const viewAbout = document.getElementById('view-about');
+        const viewContact = document.getElementById('view-contact');
+        const viewDetail = document.getElementById('view-product-detail');
+        const viewCart = document.getElementById('view-cart');
+        const viewCheckout = document.getElementById('view-checkout');
+
+        // Detail Elements
+        const detailTitle = document.getElementById('detail-title');
+        const detailPrice = document.getElementById('detail-price');
+        const detailDesc = document.getElementById('detail-desc');
+        const detailMainImg = document.getElementById('detail-main-img');
+        const detailThumbnails = document.getElementById('detail-thumbnails');
+        const sizeArea = document.getElementById('size-area');
+        const sizeOptions = document.getElementById('size-options');
+        const detailWhatsAppBtn = document.getElementById('detail-whatsapp-btn');
+        const detailStockBadge = document.getElementById('detail-stock-badge');
+
+        // Initial Load & Route Handler
+        window.onload = function () {
+            fetchCatalog();
+            updateCartCount();
+
+            // Search Listener
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchQuery = e.target.value;
+                    if (viewShop.classList.contains('hidden')) {
+                        navigate('shop');
+                    }
+                    renderProducts();
+                });
+            }
+            if (sortProducts) {
+                sortProducts.addEventListener('change', (event) => {
+                    sortOrder = event.target.value;
+                    renderProducts();
+                });
+            }
+
+            // Handle URL Hash on load & back/forward buttons
+            handleHashChange();
+            window.addEventListener('hashchange', handleHashChange);
+            window.addEventListener('scroll', collapseHeroOnScroll, { passive: true });
+        };
+
+        function collapseHeroOnScroll() {
+            if (!heroSection || !viewShop) return;
+            heroSection.classList.toggle('hero-collapsed', window.scrollY > 80);
+        }
+
+        // Fetch Dynamic Products from Database API
+        async function fetchCatalog() {
+            try {
+                const res = await fetch(`${API_BASE}/api/products`);
+                const data = await res.json();
+                if (data.success && Array.isArray(data.products)) {
+                    catalog = data.products;
+                    reconcileCartWithCatalog();
+                    catalogError = false;
+                    if (window.location.hash.startsWith('#product-')) {
+                        handleHashChange();
+                    }
+                } else {
+                    catalogError = true;
+                }
+            } catch (err) {
+                console.warn('API offline; catalog unavailable');
+                catalogError = true;
+            }
+            renderProducts();
+        }
+
+        // Hash Routing
+        function handleHashChange() {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            if (hash.startsWith('product-')) {
+                const productId = hash.replace('product-', '');
+                openProduct(productId, false);
+            } else if (['boots', 'tents', 'bags', 'shirts'].includes(hash)) {
+                navigate('shop', false);
+                setCategory(hash, false);
+            } else if (hash.startsWith('order-complete')) {
+                const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
+                const orderNum = urlParams.get('order');
+                if (orderNum) {
+                    showOrderSuccessModal(orderNum, 'Card payment verified via PayFast. Thank you for your order!');
+                    cartItems = [];
+                    updateCartCount();
+                }
+                navigate('home', false);
+            } else {
+                navigate(hash, false);
+            }
+        }
+
+        function navigate(dest, updateHash = true) {
+            if (updateHash) {
+                window.location.hash = dest;
+            }
+
+            const views = [heroSection, viewShop, viewAbout, viewContact, viewDetail, viewCart, viewCheckout];
+            views.forEach(v => { if (v) v.classList.add('hidden'); });
+
+            // Reset active nav link
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+            switch (dest) {
+                case 'home':
+                    if (heroSection) heroSection.classList.remove('hidden');
+                    if (viewShop) viewShop.classList.remove('hidden');
+                    setCategory('all', false);
+                    document.querySelector('.nav-link[href="#home"]')?.classList.add('active');
+                    break;
+                case 'shop':
+                    if (viewShop) viewShop.classList.remove('hidden');
+                    if (activeCategory === 'all') setCategory('all', false);
+                    break;
+                case 'about':
+                    if (viewAbout) viewAbout.classList.remove('hidden');
+                    document.querySelector('.nav-link[href="#about"]')?.classList.add('active');
+                    break;
+                case 'contact':
+                    if (viewContact) viewContact.classList.remove('hidden');
+                    document.querySelector('.nav-link[href="#contact"]')?.classList.add('active');
+                    break;
+                case 'detail':
+                    if (viewDetail) viewDetail.classList.remove('hidden');
+                    break;
+                case 'cart':
+                    if (viewCart) viewCart.classList.remove('hidden');
+                    renderCart();
+                    break;
+                case 'checkout':
+                    if (viewCheckout) viewCheckout.classList.remove('hidden');
+                    renderCheckout();
+                    break;
+                default:
+                    if (viewShop) viewShop.classList.remove('hidden');
+                    setCategory(dest, false);
+                    break;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setCategory(id, updateHash = true) {
+            activeCategory = id;
+            if (updateHash && id !== 'all') {
+                window.location.hash = id;
+            }
+
+            document.querySelectorAll('.cat-item').forEach(el => {
+                el.classList.remove('active');
+                if (el.getAttribute('data-id') === id) el.classList.add('active');
+            });
+
+            if (viewShop.classList.contains('hidden')) {
+                const views = [heroSection, viewAbout, viewContact, viewDetail, viewCart, viewCheckout];
+                views.forEach(v => { if (v) v.classList.add('hidden'); });
+                viewShop.classList.remove('hidden');
+            }
+
+            renderProducts();
+        }
+
+        // Render Product Cards
+        function renderProducts() {
+            if (!productGrid) return;
+            productGrid.innerHTML = '';
+            if (catalogError) {
+                productGrid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:50px 20px; background:white; border-radius:8px;">
+                        <i class="fas fa-plug fa-2x" style="color:#b91c1c; margin-bottom:12px;"></i>
+                        <p style="color:#666; font-size:1.1rem;">The product catalog is temporarily unavailable.</p>
+                        <button class="btn btn-primary" style="margin-top:15px;" onclick="fetchCatalog()">Retry Catalog</button>
+                    </div>`;
+                if (productCountLabel) productCountLabel.innerText = 'Catalog unavailable';
+                return;
+            }
+            let filtered = catalog;
+
+            if (activeCategory !== 'all') {
+                filtered = filtered.filter(p => p.category === activeCategory);
+                categoryTitle.innerText = activeCategory.toUpperCase();
+            } else {
+                categoryTitle.innerText = 'All Products';
+            }
+
+            if (searchQuery) {
+                const term = searchQuery.toLowerCase();
+                filtered = filtered.filter(p =>
+                    p.name.toLowerCase().includes(term) ||
+                    p.description.toLowerCase().includes(term)
+                );
+            }
+
+            filtered = [...filtered].sort((left, right) => {
+                if (sortOrder === 'price_asc') return left.effectivePrice - right.effectivePrice;
+                if (sortOrder === 'price_desc') return right.effectivePrice - left.effectivePrice;
+                if (sortOrder === 'name_asc') return left.name.localeCompare(right.name);
+                return new Date(right.createdAt || 0) - new Date(left.createdAt || 0);
+            });
+
+            if (productCountLabel) {
+                productCountLabel.innerText = `Showing ${filtered.length} products`;
+            }
+
+            if (filtered.length === 0) {
+                productGrid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; background: white; border-radius: 8px;">
+                        <i class="fas fa-search fa-2x" style="color: #bbb; margin-bottom: 12px;"></i>
+                        <p style="color: #666; font-size: 1.1rem;">No products match your search or filter.</p>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="setCategory('all')">View All Items</button>
+                    </div>`;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                const mainImg = p.image || (p.images ? p.images[0] : '');
+                const productImageHtml = mainImg
+                    ? `<img src="${escapeHtml(mainImg)}" alt="${escapeHtml(p.name)}" class="product-img">`
+                    : `<div class="product-img" style="display:flex; align-items:center; justify-content:center; color:#777;">Image not provided</div>`;
+                const outOfStock = !p.inStock;
+                const priceHtml = p.salePrice && p.salePrice < p.price
+                    ? `<span class="price">R${p.salePrice.toLocaleString()}</span><del style="color:#888; margin-left:8px;">R${p.price.toLocaleString()}</del>`
+                    : `<span class="price">R${p.price.toLocaleString()}</span>`;
+
+                card.innerHTML = `
+                    <div class="product-img-wrapper" style="cursor: pointer;" onclick="openProduct('${p.id}')">
+                        ${productImageHtml}
+                    </div>
+                    <div class="card-body">
+                        <h4 class="product-title" style="cursor: pointer;" onclick="openProduct('${p.id}')">${escapeHtml(p.name)}</h4>
+                        <p class="product-desc">${escapeHtml(p.description)}</p>
+                        <div class="price-row">
+                            <div>${priceHtml}</div>
+                            <div class="rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div style="font-size:0.8rem; font-weight:700; color:${outOfStock ? '#b91c1c' : '#15803d'}; margin-bottom:8px;">
+                            ${outOfStock ? 'Out of stock' : `${p.totalStock} available`}
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
+                            <button class="btn btn-primary" onclick="openProduct('${p.id}')" style="padding: 9px 12px; font-size: 0.88rem;">
+                                View
+                            </button>
+                            <button class="btn btn-buy-now" ${outOfStock ? 'disabled' : ''} onclick="addToCartDirect('${p.id}', event)" style="padding: 9px 12px; font-size: 0.88rem;">
+                                <i class="fas fa-cart-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+        }
+
+        // Open Individual Product Detail View
+        function openProduct(productId, updateHash = true) {
+            const product = catalog.find(p => p.id === productId);
+            if (!product) return;
+
+            currentProduct = product;
+            if (updateHash) {
+                window.location.hash = `product-${product.id}`;
+            }
+
+            detailTitle.innerText = product.name;
+            detailPrice.innerHTML = product.salePrice && product.salePrice < product.price
+                ? `R${product.salePrice.toLocaleString()} <del style="font-size:1rem; color:#888; margin-left:8px;">R${product.price.toLocaleString()}</del>`
+                : `R${product.price.toLocaleString()}`;
+            document.getElementById('detail-sku').innerText = product.sku ? `SKU: ${product.sku}` : '';
+            detailDesc.innerText = product.description;
+            const specificationEntries = Object.entries(product.specifications || {});
+            document.getElementById('detail-specifications').innerHTML = specificationEntries.length
+                ? `<strong>Specifications</strong><ul>${specificationEntries.map(([key, value]) => `<li>${escapeHtml(key)}: ${escapeHtml(value)}</li>`).join('')}</ul>`
+                : '';
+
+            const mainImgSrc = product.image || (product.images ? product.images[0] : '');
+            detailMainImg.src = mainImgSrc;
+            detailMainImg.alt = mainImgSrc ? product.name : 'Product image not provided';
+            detailMainImg.style.display = mainImgSrc ? '' : 'none';
+
+            // Stock Badge
+            if (detailStockBadge) {
+                if (product.totalStock !== undefined) {
+                    if (!product.inStock) {
+                        detailStockBadge.innerHTML = `<span style="background:#fee2e2; color:#b91c1c; padding:3px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold;">Out of Stock</span>`;
+                        document.getElementById('btn-detail-add').disabled = true;
+                        document.getElementById('btn-detail-buy').disabled = true;
+                    } else if (product.totalStock <= 5) {
+                        detailStockBadge.innerHTML = `<span style="background:#fef3c7; color:#b45309; padding:3px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold;">Low Stock (Only ${product.totalStock} left)</span>`;
+                    } else {
+                        detailStockBadge.innerHTML = `<span style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold;"><i class="fas fa-check-circle"></i> In Stock - Dispatched from Gauteng</span>`;
+                        document.getElementById('btn-detail-add').disabled = false;
+                        document.getElementById('btn-detail-buy').disabled = false;
+                    }
+                }
+            }
+
+            // WhatsApp Inquiry Link
+            if (detailWhatsAppBtn) {
+                const text = encodeURIComponent(`Hi CARGO, I would like to inquire about the ${product.name} (R${product.price}).`);
+                detailWhatsAppBtn.href = `https://wa.me/27767797452?text=${text}`;
+            }
+
+            // Populate Gallery Thumbnails
+            detailThumbnails.innerHTML = '';
+            const imagesList = product.images && product.images.length > 0 ? product.images : [];
+            imagesList.forEach((imgSrc, idx) => {
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.className = `detail-thumb ${idx === 0 ? 'active' : ''}`;
+                img.onclick = () => {
+                    detailMainImg.src = imgSrc;
+                    document.querySelectorAll('.detail-thumb').forEach(t => t.classList.remove('active'));
+                    img.classList.add('active');
+                };
+                detailThumbnails.appendChild(img);
+            });
+
+            // Size Selector
+            sizeOptions.innerHTML = '';
+            selectedSize = null;
+            selectedVariant = null;
+            const hasSelectableVariants = Array.isArray(product.variants) && product.variants.length > 0 && !(product.variants.length === 1 && product.variants[0].size === 'Standard' && product.variants[0].color === 'Standard');
+
+            if (hasSelectableVariants) {
+                sizeArea.style.display = 'block';
+                product.variants.forEach(v => {
+                    const btn = document.createElement('div');
+                    btn.className = `size-btn ${v.stockCount <= 0 ? 'disabled' : ''}`;
+                    btn.innerText = v.color && v.color !== 'Standard' ? `${v.size} / ${v.color}` : v.size;
+                    btn.title = v.stockCount <= 0 ? 'Out of stock' : `${v.stockCount} in stock`;
+                    if (v.stockCount > 0) {
+                        btn.onclick = () => {
+                            selectedSize = v.size;
+                            selectedVariant = v;
+                            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                        };
+                    }
+                    sizeOptions.appendChild(btn);
+                });
+            } else {
+                sizeArea.style.display = 'none';
+            }
+
+            navigate('detail', false);
+        }
+
+        // Cart Actions
+        function addToCartDetail() {
+            if (!currentProduct) return;
+            if (!currentProduct.inStock) {
+                alert('This product is currently out of stock.');
+                return;
+            }
+            const hasSelectableVariants = Array.isArray(currentProduct.variants) && currentProduct.variants.length > 0 && !(currentProduct.variants.length === 1 && currentProduct.variants[0].size === 'Standard' && currentProduct.variants[0].color === 'Standard');
+
+            if (hasSelectableVariants && !selectedVariant) {
+                alert("Please select an available product option before adding to cart.");
+                return;
+            }
+
+            const sizeToAdd = selectedSize || 'Standard';
+            const colorToAdd = selectedVariant?.color || 'Standard';
+            if (addCartItem(currentProduct, sizeToAdd, colorToAdd)) {
+                alert(`Added "${currentProduct.name}" (${sizeToAdd}) to your cart!`);
+            }
+        }
+
+        function buyNowDetail() {
+            if (!currentProduct) return;
+            if (!currentProduct.inStock) {
+                alert('This product is currently out of stock.');
+                return;
+            }
+            const hasSelectableVariants = Array.isArray(currentProduct.variants) && currentProduct.variants.length > 0 && !(currentProduct.variants.length === 1 && currentProduct.variants[0].size === 'Standard' && currentProduct.variants[0].color === 'Standard');
+
+            if (hasSelectableVariants && !selectedVariant) {
+                alert("Please select an available product option before buying.");
+                return;
+            }
+
+            const sizeToAdd = selectedSize || 'Standard';
+            const colorToAdd = selectedVariant?.color || 'Standard';
+            if (addCartItem(currentProduct, sizeToAdd, colorToAdd)) navigate('checkout');
+        }
+
+        function addToCartDirect(id, event) {
+            if (event) event.stopPropagation();
+            const product = catalog.find(p => p.id === id);
+            if (!product) return;
+            if (!product.inStock) return;
+
+            const hasSelectableVariants = Array.isArray(product.variants) && product.variants.length > 0 && !(product.variants.length === 1 && product.variants[0].size === 'Standard' && product.variants[0].color === 'Standard');
+            if (hasSelectableVariants) {
+                openProduct(id);
+                return;
+            }
+            if (!addCartItem(product, 'Standard', 'Standard')) return;
+
+            const btn = event.target.closest('button');
+            if (btn) {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Added';
+                btn.style.background = '#28a745';
+                setTimeout(() => {
+                    btn.innerHTML = orig;
+                    btn.style.background = '';
+                }, 1000);
+            }
+        }
+
+        function updateCartCount() {
+            const count = cartItems.reduce((acc, item) => acc + Number(item.qty || 0), 0);
+            if (cartCount) cartCount.innerText = count;
+            localStorage.setItem('cargoStoreCart', JSON.stringify(cartItems));
+        }
+
+        function normalizeCartSize(size) {
+            return String(size || 'Standard').replace(/^Size UK\s+/i, '').trim() || 'Standard';
+        }
+
+        function cartItemKey(item) {
+            return `${item.id}|${normalizeCartSize(item.size)}|${String(item.color || 'Standard').trim()}`;
+        }
+
+        function findCartVariant(item) {
+            const product = catalog.find(candidate => candidate.id === item.id);
+            if (!product || !Array.isArray(product.variants)) return null;
+            return product.variants.find(variant =>
+                normalizeCartSize(variant.size) === normalizeCartSize(item.size) &&
+                String(variant.color || 'Standard') === String(item.color || 'Standard')
+            ) || null;
+        }
+
+        function reconcileCartWithCatalog() {
+            const merged = new Map();
+            cartItems.forEach(item => {
+                const product = catalog.find(candidate => candidate.id === item.id);
+                const variant = findCartVariant(item);
+                if (!product || !product.inStock || !variant || variant.stockCount <= 0) return;
+                const key = cartItemKey(item);
+                const quantity = Math.max(0, Math.min(Number(item.qty) || 0, variant.stockCount));
+                if (!quantity) return;
+                const existing = merged.get(key);
+                merged.set(key, {
+                    id: product.id,
+                    name: product.name,
+                    price: product.effectivePrice,
+                    image: product.image || (product.images ? product.images[0] : ''),
+                    size: normalizeCartSize(item.size),
+                    color: variant.color || 'Standard',
+                    qty: Math.min((existing?.qty || 0) + quantity, variant.stockCount)
+                });
+            });
+            cartItems = Array.from(merged.values());
+            updateCartCount();
+        }
+
+        function addCartItem(product, size, color) {
+            const variant = findCartVariant({ id: product.id, size, color });
+            if (!variant || variant.stockCount <= 0) {
+                alert('This product option is out of stock.');
+                return false;
+            }
+            const normalizedSize = normalizeCartSize(size);
+            const normalizedColor = color || 'Standard';
+            const existing = cartItems.find(item => cartItemKey(item) === `${product.id}|${normalizedSize}|${normalizedColor}`);
+            if (existing) {
+                if (existing.qty >= variant.stockCount) {
+                    alert(`Only ${variant.stockCount} available for this option.`);
+                    return false;
+                }
+                existing.qty += 1;
+            } else {
+                cartItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.effectivePrice,
+                    image: product.image || (product.images ? product.images[0] : ''),
+                    size: normalizedSize,
+                    color: normalizedColor,
+                    qty: 1
+                });
+            }
+            updateCartCount();
+            return true;
+        }
+
+        // Render Cart View with Server Calculation
+        async function renderCart() {
+            const tbody = document.getElementById('cart-items-body');
+            const content = document.getElementById('cart-content');
+            const emptyMsg = document.getElementById('cart-empty-msg');
+
+            if (!tbody || !content || !emptyMsg) return;
+            tbody.innerHTML = '';
+
+            if (cartItems.length === 0) {
+                content.classList.add('hidden');
+                emptyMsg.classList.remove('hidden');
+                return;
+            }
+
+            content.classList.remove('hidden');
+            emptyMsg.classList.add('hidden');
+
+            let subtotal = 0;
+            cartItems.forEach((item, index) => {
+                const total = item.price * item.qty;
+                subtotal += total;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            ${item.image ? `<img src="${escapeHtml(item.image)}" class="cart-img-thumb" alt="${escapeHtml(item.name)}">` : '<span class="cart-img-thumb" style="display:flex; align-items:center; justify-content:center; color:#777; font-size:0.7rem;">No image</span>'}
+                            <div>
+                                <strong style="display:block;">${escapeHtml(item.name)}</strong>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span style="background:#eee; padding:4px 8px; border-radius:4px; font-size:0.85rem;">${escapeHtml(item.size)}${item.color && item.color !== 'Standard' ? ` / ${escapeHtml(item.color)}` : ''}</span></td>
+                    <td>R${item.price.toLocaleString()}</td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <button class="qty-btn" type="button" onclick="updateQty(${index}, -1)">-</button>
+                            <span style="font-weight:700; width:20px; text-align:center;">${item.qty}</span>
+                            <button class="qty-btn" type="button" onclick="updateQty(${index}, 1)">+</button>
+                        </div>
+                    </td>
+                    <td><strong>R${total.toLocaleString()}</strong></td>
+                    <td>
+                        <button type="button" style="color:#dc3545; background:none; border:none; cursor:pointer; font-size:1.1rem;" onclick="removeItem(${index})" title="Remove item">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            updateCartSummary('cart', subtotal);
+        }
+
+        async function updateCartSummary(prefix, fallbackSubtotal) {
+            let subtotal = fallbackSubtotal;
+            let shipping = subtotal >= 1500 ? 0 : 150;
+            let total = subtotal + shipping;
+            try {
+                const response = await fetch(`${API_BASE}/api/cart/calculate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: cartItems })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    subtotal = data.calculation.subtotal;
+                    shipping = data.calculation.shippingFee;
+                    total = data.calculation.grandTotal;
+                }
+            } catch (err) {
+                console.warn('Unable to verify cart totals with server');
+            }
+            document.getElementById(`${prefix}-subtotal`).innerText = 'R' + subtotal.toLocaleString();
+            document.getElementById(`${prefix}-shipping`).innerText = shipping === 0 ? 'FREE' : 'R' + shipping.toLocaleString();
+            document.getElementById(`${prefix}-total`).innerText = 'R' + total.toLocaleString();
+        }
+
+        function updateQty(index, change) {
+            const item = cartItems[index];
+            if (!item) return;
+            const variant = findCartVariant(item);
+            const nextQuantity = item.qty + change;
+            if (nextQuantity > 0 && (!variant || nextQuantity <= variant.stockCount)) {
+                item.qty = nextQuantity;
+            } else if (nextQuantity > 0 && variant) {
+                alert(`Only ${variant.stockCount} available for this option.`);
+                return;
+            } else {
+                cartItems.splice(index, 1);
+            }
+            updateCartCount();
+            renderCart();
+        }
+
+        function removeItem(index) {
+            cartItems.splice(index, 1);
+            updateCartCount();
+            renderCart();
+        }
+
+        function clearCart() {
+            if (!cartItems.length || !confirm('Clear all items from your cart?')) return;
+            cartItems = [];
+            updateCartCount();
+            renderCart();
+        }
+
+        // Render Checkout View
+        function renderCheckout() {
+            const list = document.getElementById('checkout-items-list');
+            if (!list) return;
+            list.innerHTML = '';
+
+            if (cartItems.length === 0) {
+                navigate('cart');
+                return;
+            }
+
+            let subtotal = 0;
+            cartItems.forEach(item => {
+                const total = item.price * item.qty;
+                subtotal += total;
+
+                const div = document.createElement('div');
+                div.className = 'order-item-mini';
+                div.innerHTML = `
+                    ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">` : '<span style="width:55px; height:55px; display:flex; align-items:center; justify-content:center; color:#777; font-size:0.7rem;">No image</span>'}
+                    <div style="flex:1;">
+                        <div style="font-weight:700; font-size:0.9rem;">${escapeHtml(item.name)}</div>
+                        <div style="font-size:0.8rem; color:#666;">${escapeHtml(item.size)} &times; ${item.qty}</div>
+                    </div>
+                    <div style="font-weight:700;">R${total.toLocaleString()}</div>
+                `;
+                list.appendChild(div);
+            });
+
+            updateCartSummary('chk', subtotal);
+        }
+
+        // Process Real Backend Checkout
+        async function processCheckout(event) {
+            if (event) event.preventDefault();
+
+            if (cartItems.length === 0) {
+                alert("Your cart is empty!");
+                navigate('shop');
+                return;
+            }
+
+            const btn = document.getElementById('btn-place-order');
+            btn.innerText = 'Verifying Order with Server...';
+            btn.disabled = true;
+
+            const payload = {
+                fname: document.getElementById('chk-fname').value,
+                lname: document.getElementById('chk-lname').value,
+                email: document.getElementById('chk-email').value,
+                phone: document.getElementById('chk-phone').value,
+                address: document.getElementById('chk-address').value,
+                city: document.getElementById('chk-city').value,
+                postal: document.getElementById('chk-postal').value,
+                paymentMethod: document.querySelector('input[name="payment"]:checked').value,
+                items: cartItems
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/api/orders/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (!data.success) {
+                    alert(`Order Error: ${data.message}`);
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order Now';
+                    btn.disabled = false;
+                    return;
+                }
+
+                // If PayFast payment
+                if (data.paymentMethod === 'payfast' && data.paymentData) {
+                    btn.innerText = 'Redirecting to Secure PayFast Gateway...';
+                    submitPayFastForm(data.paymentData);
+                    return;
+                }
+
+                // If Manual EFT payment
+                const eft = data.paymentData?.bankDetails;
+                const message = `
+                    <div style="background:#f9fafb; padding:16px; border-radius:6px; margin-bottom:16px;">
+                        <h4 style="color:var(--primary-color); margin-bottom:6px;">Order #${data.orderNumber} Placed</h4>
+                        <p>Total Amount: <strong>R${data.total.toLocaleString()}</strong></p>
+                    </div>
+                    <div style="background:#fefce8; border:1px solid #fde047; padding:16px; border-radius:6px; margin-bottom:16px;">
+                        <h4 style="color:#854d0e; margin-bottom:8px;">EFT Banking Details</h4>
+                        <p><strong>Bank:</strong> ${eft.bank}</p>
+                        <p><strong>Account Name:</strong> ${eft.accountName}</p>
+                        <p><strong>Account Number:</strong> ${eft.accountNumber}</p>
+                        <p><strong>Branch Code:</strong> ${eft.branchCode}</p>
+                        <p><strong>Reference:</strong> <strong>${eft.reference}</strong></p>
+                    </div>
+                    <p style="font-size:0.9rem; color:#666;">A confirmation has been logged. Please send proof of payment to WhatsApp <strong>076 779 7452</strong>.</p>
+                `;
+
+                showOrderSuccessModal(data.orderNumber, message);
+                cartItems = [];
+                updateCartCount();
+                document.getElementById('checkout-form').reset();
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order Now';
+                btn.disabled = false;
+
+            } catch (err) {
+                console.error(err);
+                alert('Network or server error while placing order. Please try again.');
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order Now';
+                btn.disabled = false;
+            }
+        }
+
+        // Automated PayFast Form Submission
+        function submitPayFastForm(pf) {
+            const container = document.getElementById('payfast-form-container');
+            container.innerHTML = '';
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = pf.postUrl;
+
+            for (let key in pf.data) {
+                if (pf.data.hasOwnProperty(key)) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = pf.data[key];
+                    form.appendChild(input);
+                }
+            }
+
+            container.appendChild(form);
+            form.submit();
+        }
+
+        async function submitContactForm(event, form) {
+            event.preventDefault();
+            const response = await fetch(`${API_BASE}/api/contact`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: document.getElementById('contact-name').value,
+                    email: document.getElementById('contact-email').value,
+                    message: document.getElementById('contact-message').value
+                })
+            });
+            const data = await response.json();
+            alert(data.message || 'Unable to send your message.');
+            if (data.success) form.reset();
+        }
+
+        // Modal Helpers
+        function openModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        }
+
+        function showOrderSuccessModal(orderNum, messageHtml) {
+            document.getElementById('order-success-content').innerHTML = messageHtml;
+            openModal('order-success-modal');
+        }
+
+        // XSS Helper
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+
+</html>
